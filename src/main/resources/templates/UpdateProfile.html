@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.com">
+<head>
+<meta charset="UTF-8">
+<title>Expense Tracker</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet"
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}"
+	integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link
+	th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css}"
+	rel="stylesheet"
+	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+	crossorigin="anonymous">
+
+<link rel="icon" th:href="@{/images/logo.png}">
+<Style>
+#foo {
+	/* position: absolute;
+        bottom: 0px; */
+	width: 100%;
+	height: 80px;
+	background-color: black;
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-wrap: wrap;
+}
+
+#list {
+	list-style-type: none;
+	font-size: 20px;
+	text-align: left;
+	font-weight: bolder;
+}
+
+#list li {
+	padding-bottom: 3px;
+}
+
+li a {
+	text-decoration: none;
+	color: black;
+}
+
+li a:hover {
+	background-color: black;
+	color: white;
+}
+
+#list {
+	display: none;
+	position: absolute;
+	right: 3%;
+}
+
+#setting:hover #list {
+	display: block;
+}
+
+.container {
+	max-width: 400px;
+	margin: 0 auto;
+	padding: 20px;
+	height: 790px;
+}
+
+label, input, textarea {
+	display: block;
+	margin-bottom: 10px;
+}
+
+input[type="file"] {
+	margin-top: 10px;
+}
+
+input[type="submit"] {
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	cursor: pointer;
+}
+
+#profile-photo {
+	max-width: 100%;
+	height: auto;
+	display: none;
+}
+</Style>
+</head>
+<body>
+	<nav class="navbar p-0 mb-0" style="border-bottom: 4px black double;">
+		<div class="container-fluid"
+			style="background-color: plum; padding: 1%">
+			<a class="navbar-brand" th:href="@{/expense/index}"> <img
+				th:src="@{/images/logo.png}" alt="Logo" width="60" height="60"
+				class="d-inline-block align-text-top"> <span
+				class="fs-2 fw-bolder align-text-top"
+				style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">Spring
+					Expenses Tracker</span>
+			</a> <a th:href="@{/expense/home}"
+				style="color: green; position: absolute; right: 42%;"> <span
+				class="text-xxl-end" style="font-size: 40px;"><i
+					class=" fa-solid fa-house"></i></span>
+			</a>
+			<div class="text-xxl-end"
+				style="font-size: 40px; margin-right: 20px;" id="setting">
+				<i class="fa-solid fa-user-gear fa-flip" style="color: black;"></i>
+				<ul id="list">
+					<li><a href="#">About Us</a></li>
+					<li><a href="#">Contact Us</a></li>
+					<li><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<h1>Update Your Profile</h1>
+		<form th:action="@{/updateuser/{id} (id=${session.user.userId})}"
+			method="POST" enctype="multipart/form-data">
+			
+			<label for="username">Username:</label> 
+			<input type="text" id="username" name="userName" required th:value="${session.user.userName}"> 
+			
+			<input type="text"  name="fullName" required th:value="${session.user.userName}" hidden>	
+			
+			<label for="email">Email:</label>
+			<input type="email" id="email" name="email" required th:value="${session.user.email}"> 
+			
+			<label for="bio">Mobile:</label>
+			<input  name="mobile" required th:value="${session.user.mobile}"></input>
+
+			<label for="bio">Password:</label> 
+			<input id="bio" name="password" required th:value="${session.user.password}" type="password"></input> 
+			
+			<label>Profile Photo:</label> 
+			<input type="file" id="fileInput" accept="image/*"  name="imageFile"> 
+			
+			<!-- to display image from session object -->
+			<img id="displayImage" th:if="${session.image != null}" 
+			th:src="'data:image;base64,' + ${session.image}">
+
+			<button>Update Profile</button>
+		</form>
+	</div>
+
+	<div id="foo">
+		<p style="color: white;">&copy; 2023 JSpiders. All rights
+			reserved.</p>
+	</div>
+	<script>
+		const fileInput = document.getElementById("fileInput");
+		const displayImage = document.getElementById("displayImage");
+
+		fileInput.addEventListener("change", function() {
+			const file = fileInput.files[0];
+			if (file && file.type.startsWith("image/")) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					displayImage.src = e.target.result;
+					displayImage.style.display = "block";
+				};
+				reader.readAsDataURL(file);
+			}
+		});
+	</script>
+</body>
+</html>
